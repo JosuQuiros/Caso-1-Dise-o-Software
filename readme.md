@@ -53,7 +53,7 @@ The expected results include a significant reduction in manual workload, fewer d
 #### Login Screen
 This screen presents a centralized access form that integrates **Username**, **Password** (with visibility toggle option), and a specific field for the **OTP** (one-time token).  
 It includes a **dynamic alert area** that only appears when invalid credentials are entered, prioritizing security and clarity before entering the system.  
-![Ventana Login]([https://example.com/paisaje.jpg](https://lh3.googleusercontent.com/gg-dl/AOI_d__BAF7Bw9VkYuQ7AeTKuTmqx9_kwBwyWAbwqXfx1E_B_o7DEkSTNDfVUl_ON49Hb3zc4Oj4nhFCcPm7AvEKniBCfHF7Z41W05Zt2_dzSUe_i3xjjcAd6LbPGsZRhUSC9URcLZfgr10GHTQtsoUxAnASoIv5DUq_ryF00IyfZX9cbvb3Hw=s1024-rj))
+![Ventana Login](https://lh3.googleusercontent.com/gg-dl/AOI_d__BAF7Bw9VkYuQ7AeTKuTmqx9_kwBwyWAbwqXfx1E_B_o7DEkSTNDfVUl_ON49Hb3zc4Oj4nhFCcPm7AvEKniBCfHF7Z41W05Zt2_dzSUe_i3xjjcAd6LbPGsZRhUSC9URcLZfgr10GHTQtsoUxAnASoIv5DUq_ryF00IyfZX9cbvb3Hw=s1024-rj))
 
 #### Select Folder
 Upload interface that allows the user to choose the source path of the documents; includes language selectors and a slider control to define the minimum confidence level required by the AI. 
