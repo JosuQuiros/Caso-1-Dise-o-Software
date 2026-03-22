@@ -242,7 +242,6 @@ Integration with external services (AWS Cognito, S3, AI processing services) is 
 This scaffold ensures scalability, maintainability, and alignment with the defined system architecture.
 
 ```
-mermaid
 /src
 │
 ├── app/
