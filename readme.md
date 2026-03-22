@@ -23,6 +23,7 @@ The expected results include a significant reduction in manual workload, fewer d
 - Zod 4.3.6 to data validation
 - Prettier 3.8.1
 - esLint 10.0.2
+
 ## 1.2 UX UI analysis
 ### Core business process
 #### Login
@@ -53,30 +54,170 @@ The expected results include a significant reduction in manual workload, fewer d
 #### Login Screen
 This screen presents a centralized access form that integrates **Username**, **Password** (with visibility toggle option), and a specific field for the **OTP** (one-time token).  
 It includes a **dynamic alert area** that only appears when invalid credentials are entered, prioritizing security and clarity before entering the system.  
-![Ventana Login](https://lh3.googleusercontent.com/gg-dl/AOI_d__BAF7Bw9VkYuQ7AeTKuTmqx9_kwBwyWAbwqXfx1E_B_o7DEkSTNDfVUl_ON49Hb3zc4Oj4nhFCcPm7AvEKniBCfHF7Z41W05Zt2_dzSUe_i3xjjcAd6LbPGsZRhUSC9URcLZfgr10GHTQtsoUxAnASoIv5DUq_ryF00IyfZX9cbvb3Hw=s1024-rj))
+![Ventana Login](Imagenes/Wireframes/Login.png)
 
 #### Select Folder
 Upload interface that allows the user to choose the source path of the documents; includes language selectors and a slider control to define the minimum confidence level required by the AI. 
-![Seleccionar Folder](https://lh3.googleusercontent.com/gg-dl/AOI_d_8VJgNmjsQe9WBK4NW_-rC10EdM-FQJPRYZlSMVZkdQ3h6xJ_fXA7MJ7r8u7FGbriVShujXLzqJspoVXpovuXRnZymwe3rEuy6QMcQs5hjjGRS1btmaKbRBVjGa2ykOzAJk1csv8NAcrXlKGlzBN2Rl8SDYFKSWsv6E9IvgJ5ituMA6Rw=s1024-rj)
+![Seleccionar Folder](Imagenes/Wireframes/SeleccionarDocumento.png)
 #### Select DUA Template
 Selection panel that displays the official variants of the form (Import, Export, etc.) through interactive cards and a preview of the corresponding `.docx` format.  
-![Seleccionar la plantilla de DUA](https://lh3.googleusercontent.com/gg-dl/AOI_d_-12bmMgvKlGIcQ3BCWbXJ3DhyKCLz4O_DI2wYmr3GQLu8rpyouqMgiqSCxYfyq0oL82u7FRT6jx3lEhv6ckZVuBWXWA0NdFyx2cerS584ZrrmCpdBbnLke2AgRXaJywxJddbmsaHCAF8jowCvnZgUR1BfYbyd5-P7NoWDRRrdg5IX9JA=s1024-rj)
+![Seleccionar la plantilla de DUA](Imagenes/Wireframes/SeleccionarPlantilla.png)
 #### How to Monitor Process Progress
 Real-time dashboard that breaks down the stages of extraction and semantic analysis, using progress bars and low-confidence alerts for each processed file.  
-![Monitoreo de avance](https://lh3.googleusercontent.com/gg-dl/AOI_d_8bEUY4RfOoUHE5tVxQyj5-as-fzp-ceuziZVKarFO2bsIco7khrZzu44tb64qzvtvdPjSGHs2bdgKbIKoX9VljzrPM-40CQcZnokL6nKd384bmLGvIWI8faEkOyzauNQe9OysLVl_7h2LRDNmXg5BVthGBDA8ITOlJlYjd52pfUpMy_A=s1024-rj)
+![Monitoreo de avance](Imagenes/Wireframes/ViewProcess.png)
 #### How the Final Result Looks
 Closing screen that presents the generated document with a traffic-light system (green/yellow/red) applied to the data, and enables the final download of the Word file ready for submission to the Ministry of Finance.  
-![Resultado Final](https://lh3.googleusercontent.com/gg-dl/AOI_d_9iiQBIsrqBtNnCxsmOgH8wrNotWmR22fCLdPSg_J0cUmVxprUzQi1CFQ5w9Vm4SDA29odvuY0aTXERWNQoewhbeg5qALFBvT5_qKw5o5ceOSKCQ2yOIXQyL7MeA72gECAuc88NomwdYfmi0JhGQhCYDlZE0SKUQQawBUiZCoaOnJM3pA=s1024-rj)
-
-
-
+![Resultado Final](Imagenes/Wireframes/Resultado.png)
 
 ## 1.3 Component design strategy
-
+- Use Atomic Design methodology to structure UI components (atoms, molecules, organisms, templates, pages) in React.  
+- Develop all components using React 19.2 with TypeScript 5.9.3 to ensure type safety and maintainability.  
+- Encapsulate styles per component using CSS Modules to avoid style conflicts and improve scalability.  
+- CSS class naming convention follows: ComponentName-StyleName.  
+- Use relative units (em/rem) for layout and typography to support responsive design.  
+- Components support internationalization using react-i18next (v16.5.8).  
+- Ensure component reusability and testability through unit tests with Jest 30.2.0.  
+- Validate component behavior and user interactions through integration/end-to-end testing using Playwright 1.58.2.  
+- Follow a modular folder structure separating components, hooks, services, and utilities.  
+- No specific accessibility (a11y) requirements are defined for this application.
 
 ## 1.4 Security
+- Multi-Factor Authentication (MFA) through AWS Cognito.  
+- Mobile authenticator application (TOTP) supported.  
+- Single Sign-On (SSO) through AWS Cognito (with optional external identity providers).  
+- Authentication is handled by AWS Cognito.  
+  
+- **Roles:**  
+- Manager  
+- Customs Agent  
+### Permissions by Role  
+
+#### Manager  
+  
+- **Permission Code:** MANAGE_USERS  
+- **Description:** Manage user CRUD operations.  
+  
+- **Permission Code:** VIEW_REPORTS  
+- **Description:** Access operational and performance reports.  
+  
+- **Permission Code:** EDIT_TEMPLATES  
+- **Description:** Modify or update available DUA templates.  
+  
+#### Customs Agent  
+  
+- **Permission Code:** LOAD_FILES  
+- **Description:** Upload folders containing required data files.  
+  
+- **Permission Code:** GENERATE_DUA  
+- **Description:** Initiates the AI process to generate a DUA.  
+  
+- **Permission Code:** DOWNLOAD_DUA  
+- **Description:** Download generated DUA documents.  
+  
+---  
+  
+- AWS Secrets Manager is used to store environment variables, API keys, and sensitive configuration data.  
+- **Server Name:** `customs-identity-service`
 
 ## 1.5 Layered design
 
-## 1.6 Design patterns
+- The frontend supports Server-Side Rendering (SSR) using React 19 with a Node.js runtime.
 
+- If there is no authenticated session, the Authentication Layer is invoked via AWS Cognito.
+
+- If authentication is successful, the requested view is rendered within the Components Layer.
+
+- Components follow Atomic Design (atoms, molecules, organisms, templates, and pages).  
+  Within components, a Hooks Layer connects UI interactions with the Services Layer.
+
+- The Services Layer contains the core business logic of the application.
+
+- Services may require access to the following layers:
+  - Utils (helper functions and shared utilities)
+  - ApiClients (external API communication)
+  - Settings (configuration management)
+
+- ApiClients contains all modules responsible for interacting with external services (e.g., AWS services, third-party APIs).
+
+- Settings retrieves environment variables and secrets from AWS Secrets Manager during runtime.
+
+- ApiClients read API endpoints, credentials, and configuration values from the Settings layer.
+
+- All ApiClient requests and responses are mapped using Models (TypeScript interfaces/types), which are validated using a Data Validation layer (e.g., Zod).
+
+- All layers can access shared modules such as:
+  - Models
+  - Utils
+  - State Management (e.g., Redux Toolkit or React Context)
+
+- A Notification Service layer enables asynchronous communication between services using event-driven patterns (e.g., AWS SNS/SQS or callbacks).
+
+- Asynchronous operations (e.g., long-running DUA generation processes) are handled via events and callbacks through the Notification Service.
+
+- The Logging Layer provides centralized logging of system events and errors (e.g., AWS CloudWatch).
+
+- The Exception Handling Layer is shared across all layers to standardize error management and responses.
+
+---
+
+### Architecture Diagram 
+
+				+----------------------+  
+				| User Browser |  
+				+----------+-----------+  
+						|  
+						v  
+				+---------------------------+  
+				| AWS (CloudFront / ALB) |  
+				| NodeJS + React SSR |  
+				+----------+----------------+  
+						|  
+				SSR Request Handling  
+						|  
+				Authentication  
+				(AWS Cognito)  
+						|  
+				+----------------------+  
+				| Components Layer |  
+				| Atomic Design UI |  
+				| Atoms → Pages |  
+				+----------+-----------+  
+						|  
+				Hooks  
+						|  
+				Services Layer  
+						|  
+				+----------+-----------+-----------+  
+						| | | |  
+				Utils ApiClients Settings State Mgmt  
+						|  
+				AWS Secrets Manager  
+						|  
+				Secrets / Config
+
+---
+
+ApiClients → External APIs / AWS Services  
+External Services → Notification Service (Events / Callbacks)
+
+Shared Layers:
+
+- Models (TypeScript)
+    
+- Zod Validation
+    
+- Redux / Context API
+    
+- Exception Handling
+    
+- Logging (AWS CloudWatch)
+    
+
+CI/CD:  
+GitHub Repository → GitHub Actions → Build & Test (Jest / Playwright) → Deploy (AWS: EC2 / ECS / Amplify)
+
+## 1.6 Design patterns
+- Use Builder Pattern and Strategy Pattern to create the diffrent document processors such as wordx, xlsx, pdf, jpg, png. 
+- NotificationService subscriptions works with Obsever pattern
+- Use adapter pattern to decide the output format to be writen in the documents, use FormatAdapters y Concret Format such as: Paragraph, Bullets, Table, Label, Amount. 
+- Singleton for: ExceptionHandling, Document Parsers, Utils, StateManagement, The Api Clients, Settings classes. 
