@@ -226,3 +226,140 @@ GitHub Repository → GitHub Actions → Build & Test (Jest / Playwright) → De
 - NotificationService subscriptions works with Obsever pattern
 - Use adapter pattern to decide the output format to be writen in the documents, use FormatAdapters y Concret Format such as: Paragraph, Bullets, Table, Label, Amount. 
 - Singleton for: ExceptionHandling, Document Parsers, Utils, StateManagement, The Api Clients, Settings classes. 
+
+## 1.7 Scaffold
+
+The project scaffold under /src reflects the architectural decisions defined in sections 1.1 to 1.6.
+
+The structure follows a layered architecture, separating concerns into Components, Hooks, Services, ApiClients, and shared modules such as Models, Utils, and State Management.
+
+Atomic Design methodology is implemented within the components directory, organizing UI elements into atoms, molecules, organisms, templates, and pages.
+
+Design patterns such as Strategy, Builder, Adapter, Observer, and Singleton are represented through dedicated folders (processors, adapters, notifications, and shared utilities).
+
+Integration with external services (AWS Cognito, S3, AI processing services) is encapsulated within the apiClients layer, while configuration and secrets management are handled through the settings module.
+
+This scaffold ensures scalability, maintainability, and alignment with the defined system architecture.
+
+```
+mermaid
+/src
+│
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── routes/
+│       ├── login.route.tsx
+│       ├── dashboard.route.tsx
+│       ├── generator.route.tsx
+│       └── result.route.tsx
+│
+├── components/
+│   ├── atoms/
+│   │   ├── Button/
+│   │   ├── Input/
+│   │   ├── Label/
+│   │   └── Loader/
+│   │
+│   ├── molecules/
+│   │   ├── LoginForm/
+│   │   ├── FileSelector/
+│   │   └── ConfidenceSlider/
+│   │
+│   ├── organisms/
+│   │   ├── LoginPanel/
+│   │   ├── ProgressDashboard/
+│   │   └── ResultViewer/
+│   │
+│   ├── templates/
+│   │   ├── AuthTemplate/
+│   │   └── DashboardTemplate/
+│   │
+│   └── pages/
+│       ├── LoginPage/
+│       ├── DashboardPage/
+│       ├── GeneratorPage/
+│       └── ResultPage/
+│
+├── hooks/
+│   ├── useAuth.ts
+│   ├── useDUAGenerator.ts
+│   ├── useProgress.ts
+│   └── useNotifications.ts
+│
+├── services/
+│   ├── AuthService.ts
+│   ├── DUAGeneratorService.ts
+│   ├── DocumentProcessingService.ts
+│   ├── NotificationService.ts
+│   └── ValidationService.ts
+│
+├── apiClients/
+│   ├── CognitoClient.ts
+│   ├── S3Client.ts
+│   ├── AIProcessingClient.ts
+│   └── BackendClient.ts
+│
+├── models/
+│   ├── User.ts
+│   ├── DUA.ts
+│   ├── Document.ts
+│   └── ApiResponses.ts
+│
+├── validation/
+│   ├── auth.schema.ts
+│   ├── dua.schema.ts
+│   └── document.schema.ts
+│
+├── utils/
+│   ├── Logger.ts
+│   ├── Formatter.ts
+│   ├── FileUtils.ts
+│   └── ErrorHandler.ts
+│
+├── state/
+│   ├── store.ts
+│   ├── auth.slice.ts
+│   ├── dua.slice.ts
+│   └── ui.slice.ts
+│
+├── settings/
+│   ├── config.ts
+│   └── secretsManager.ts
+│
+├── adapters/
+│   ├── FormatAdapter.ts
+│   ├── ParagraphAdapter.ts
+│   ├── TableAdapter.ts
+│   ├── LabelAdapter.ts
+│   └── AmountAdapter.ts
+│
+├── processors/
+│   ├── DocumentProcessor.ts
+│   ├── strategies/
+│   │   ├── PdfProcessor.ts
+│   │   ├── WordProcessor.ts
+│   │   ├── ExcelProcessor.ts
+│   │   └── ImageProcessor.ts
+│   │
+│   └── builder/
+│       └── ProcessorBuilder.ts
+│
+├── notifications/
+│   ├── Subject.ts
+│   ├── Observer.ts
+│   └── NotificationSubscriber.ts
+│
+├── middleware/
+│   ├── authMiddleware.ts
+│   └── roleMiddleware.ts
+│
+├── logging/
+│   └── WinstonLogger.ts
+│
+└── tests/
+    ├── unit/
+    └── integration/
+
+
+```
