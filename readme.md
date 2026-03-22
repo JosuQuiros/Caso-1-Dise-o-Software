@@ -55,19 +55,24 @@ The expected results include a significant reduction in manual workload, fewer d
 This screen presents a centralized access form that integrates **Username**, **Password** (with visibility toggle option), and a specific field for the **OTP** (one-time token).  
 It includes a **dynamic alert area** that only appears when invalid credentials are entered, prioritizing security and clarity before entering the system.  
 ![Ventana Login](Imagenes/Wireframes/Login.png)
+![Heatmap Login](Imagenes/Heatmaps/Login.png)
 
 #### Select Folder
 Upload interface that allows the user to choose the source path of the documents; includes language selectors and a slider control to define the minimum confidence level required by the AI. 
 ![Seleccionar Folder](Imagenes/Wireframes/SeleccionarDocumento.png)
+![Heatmap SelectDocument](Imagenes/Heatmaps/SelectDocument)
 #### Select DUA Template
 Selection panel that displays the official variants of the form (Import, Export, etc.) through interactive cards and a preview of the corresponding `.docx` format.  
 ![Seleccionar la plantilla de DUA](Imagenes/Wireframes/SeleccionarPlantilla.png)
+![Heatmap SelectTemplate](Imagenes/Heatmaps/SelectTemplate)
 #### How to Monitor Process Progress
 Real-time dashboard that breaks down the stages of extraction and semantic analysis, using progress bars and low-confidence alerts for each processed file.  
 ![Monitoreo de avance](Imagenes/Wireframes/ViewProcess.png)
+![Heatmap ViewerProcess](Imagenes/Heatmaps/ViewerProcess)
 #### How the Final Result Looks
 Closing screen that presents the generated document with a traffic-light system (green/yellow/red) applied to the data, and enables the final download of the Word file ready for submission to the Ministry of Finance.  
 ![Resultado Final](Imagenes/Wireframes/Resultado.png)
+![Heatmap Result](Imagenes/Heatmaps/Result)
 
 ## 1.3 Component design strategy
 - Use Atomic Design methodology to structure UI components (atoms, molecules, organisms, templates, pages) in React.  
