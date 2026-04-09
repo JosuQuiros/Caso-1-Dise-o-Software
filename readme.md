@@ -362,3 +362,279 @@ This scaffold ensures scalability, maintainability, and alignment with the defin
 
 
 ```
+# 2. Backend design
+
+## Technology stack
+
+- REST API over HTTPS  
+- API Gateway (AWS API Gateway) + Hosting (AWS Elastic Beanstalk)  
+- API standard defined using OpenAPI 3.0 (Swagger)  
+- For asynchronous operations and notifications:
+  - AWS SNS (event publishing)
+  - AWS SQS (message queuing)
+- Load balancing is managed internally by AWS services (no manual configuration required)  
+- API coding language: C#, ASP.NET Core (.NET 8)  
+- Monorepo solution shared with frontend  
+  - Backend folder: `/duabusiness`  
+
+### Services vs Microservices
+The system is implemented as a **Modular Monolith**, allowing:
+- Lower complexity in development and deployment  
+- Clear modular separation internally  
+- Future migration to microservices if required  
+
+---
+
+## Security
+
+- HTTPS enforced (TLS 1.2+)  
+
+- Encryption:
+  - Data at rest: AES-256 (AWS S3 and RDS)  
+  - Data in transit: HTTPS  
+
+- Authentication & Authorization:
+  - JWT tokens validated via AWS Cognito  
+  - Role-based access control:
+    - Manager  
+    - Customs Agent  
+
+- Payload size:
+  - Default: 10MB  
+  - File upload endpoints: up to 200MB (streaming enabled)  
+
+- Rate limiting:
+  - 100 requests per second per client  
+  - Burst limit: 200 requests  
+
+- Data lifecycle:
+  - Production data retention: 30 days  
+  - Archived to AWS S3 Glacier after retention period  
+
+---
+
+## Observability
+
+- Events to be logged:
+  - Authentication attempts  
+  - File uploads  
+  - Document processing stages  
+  - AI extraction results  
+  - Errors and exceptions  
+  - Low-confidence detections  
+
+- Platform:
+  - AWS CloudWatch Logs  
+
+- Dashboards:
+  - AWS CloudWatch Dashboards  
+
+- Tracing:
+  - AWS X-Ray  
+
+---
+
+## Infrastructure (DevOps)
+
+- CI/CD:
+  - GitHub Actions  
+
+- Deployment environments:
+  - Development  
+  - Staging  
+  - Production  
+
+- Deployment strategy:
+  - AWS Elastic Beanstalk deployments via GitHub Actions  
+
+- Infrastructure as Code:
+  - Terraform or AWS CloudFormation  
+
+---
+
+## Availability
+
+- Target uptime: **99.99%**  
+
+- Estimated downtime:
+  - ~52.6 minutes per year  
+
+### Single Points of Failure and Mitigation
+
+- API Layer:
+  - Managed by AWS → automatic recovery  
+
+- Database (RDS):
+  - Multi-AZ deployment for failover  
+
+- Storage (S3):
+  - High durability and redundancy  
+
+- Background processing:
+  - SQS retry policies and message reprocessing  
+
+### Recovery Strategy
+
+- Automatic instance restart  
+- Daily database backups  
+- S3 versioning enabled  
+
+---
+
+## Scalability
+
+The following components scale with increased request load:
+
+- AWS API Gateway (request scaling)  
+- AWS Elastic Beanstalk (auto-scaling instances)  
+- AWS SQS (decoupled processing)  
+- AWS S3 (automatic storage scaling)  
+
+### Strategy
+
+- Stateless API design  
+- Event-driven architecture  
+- Parallel document processing  
+
+---
+
+## Backend key workflows
+
+### Upload files to generate DUA
+
+1. The backend receives the list of files to be uploaded  
+2. A streaming transfer is initialized file by file  
+3. Files are received in raw format  
+4. Files are stored in AWS S3  
+5. Metadata is stored in AWS RDS  
+6. An event is published to SNS  
+7. SQS queues the processing task  
+8. A background worker processes the documents  
+9. Progress updates are generated  
+
+---
+
+### Setup DUA template
+
+1. Manager uploads or selects a DUA template  
+2. Template file is stored in AWS S3  
+3. Template metadata is stored in RDS  
+4. Template structure is validated  
+5. Template is made available for system usage  
+
+---
+
+## Architecture diagrams in layers
+
+The system follows the **C4 model**, including:
+
+- Context diagram  
+- Container diagram  
+- Code (layered) diagram  
+
+### Context Diagram
+```
+User (Customs Agent / Manager)
+              |
+v
+Frontend (React Application)
+|
+v
+Backend API (.NET)
+|
++--> AWS Cognito (Authentication)
++--> AWS S3 (File Storage)
++--> AWS RDS (Database)
++--> AWS SNS/SQS (Messaging)
+```
+### Container Diagram
+```
+[Frontend - React (Elastic Beanstalk)]
+|
+v
+[AWS API Gateway]
+|
+v
+[Backend API - ASP.NET Core (Elastic Beanstalk)]
+|
++----+----+----+
+| | | |
+[AWS RDS] [AWS S3] [AWS SQS] [AWS SNS]
+``` 
+### Layered architecture
+```
++--------------------------+
+| API Layer (Controllers)  |
++------------+-------------+
+             |
++------------v-------------+
+| Application Layer        |
+| (Services / Use Cases)   |
++------------+-------------+
+             |
++------------v-------------+
+| Domain Layer             |
+| (Models, Business Logic) |
++------------+-------------+
+             |
++------------v-------------+
+| Infrastructure Layer     |
+| (S3, RDS, SNS, SQS, AI)  |
++--------------------------+
+``` 
+
+
+---
+
+## Design Considerations
+
+- System configurations and secrets are managed using AWS Secrets Manager  
+
+- Resource allocation:
+  - API instances scale automatically via Elastic Beanstalk  
+  - Database configured with Multi-AZ deployment  
+
+- Algorithms:
+  - Document processing strategies based on file type  
+  - AI-based semantic analysis configurable  
+
+- Agent prototypes:
+  - AI processing agents abstracted via interfaces  
+
+- Integration points:
+  - AWS S3 (storage)  
+  - AWS RDS (database)  
+  - AWS SNS/SQS (messaging)  
+  - External AI processing services  
+
+---
+
+## Source Code
+
+- A specialized agent will generate the backend skeleton based on this architecture  
+
+- The agent will:
+  - Generate folder structure  
+  - Create base classes and interfaces  
+  - Avoid implementing business logic  
+
+- Directory structure aligned with architecture:
+```
+/duabusiness
+├── api/
+├── application/
+├── domain/
+├── infrastructure/
+├── processors/
+├── adapters/
+├── configuration/
+├── logging/
+└── tests/
+``` 
+
+### Key folders
+
+- API Controllers: `/duabusiness/api/controllers`  
+- Application Services: `/duabusiness/application/services`  
+- Domain Models: `/duabusiness/domain/models`  
+- Infrastructure: `/duabusiness/infrastructure`  
